@@ -1,0 +1,24 @@
+{
+  "fetched_at": "2026-07-09T10:00:00Z",
+  "source": "amazon.com",
+  "deal_threshold": 0.98,
+  "items": [
+    {
+      "asin": "B0CHX2F5QT",
+      "category": "MacBook Air",
+      "name": "MacBook Air 13\" M3 8GB 256GB",
+      "title": "2024 Apple MacBook Air 13-inch Laptop Apple M3 Chip 8GB RAM 256GB SSD Storage Backlit Keyboard FaceTime HD Camera Touch ID Works with iPhone/iPad Midnight",
+      "current_price": 999.0,
+      "list_price": 1099.0,
+      "currency": "USD",
+      "availability": "In Stock",
+      "seller": "Apple",
+      "is_deal": true,
+      "savings_pct": 9.1,
+      "new_msrp": 1099,
+      "url": "https://www.amazon.com/dp/B0CHX2F5QT?tag=comperige03-20",
+      "fetched_at": "2026-07-09T10:00:01Z",
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.env
+.env.local
+.DS_Store
+*.log
+
+# Vercel
+.vercel/
+
+# Python
+__pycache__/
+*.pyc
+tracker.db
+
+# Local scratch (used by storage.py when running outside Vercel)
+/tmp/amazon_tracker_deals.json

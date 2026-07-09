@@ -1,0 +1,121 @@
+# Apple product seed — ASINs of current Apple gear on Amazon US.
+#
+# Each entry has:
+#   asin:       Amazon US ASIN
+#   apple_sku:  model identifier (best effort)
+#   category:   MacBook / iPad / iPhone / AirPods / Watch
+#   name:       short label
+#   new_msrp:   post-2026-06-25 Apple US MSRP (USD) — baseline for deal detection
+#   notes:      context about pricing history
+#
+# The `new_msrp` is the BASELINE we compare against.
+# Any current_price < new_msrp * 0.98 is flagged as a "still old price" deal.
+#
+# To regenerate ASINs: search amazon.com for the product, take the top
+# Apple-store ASIN. For iPhones/Macs that are sold direct only, use the
+# "Apple" brand filter in the search sidebar.
+#
+# US MSRP adjustments (post-2026-06-25 per Reuters memory-cost story):
+#   MacBook Air: +$100 across the line
+#   MacBook Pro: +$200-400 depending on config
+#   iPad Pro:    +$100
+#   iPad Air 13": held at $799
+#   iPhone 16:   +$100
+#   AirPods:     +$20-50
+#   Apple Watch: small bumps
+apple_seed:
+  - asin: B0CHX2F5QT
+    apple_sku: MRXN3LL/A
+    category: MacBook Air
+    name: 'MacBook Air 13" M3 8GB 256GB'
+    new_msrp: 1099
+    notes: 'Apple store base config — pre-2026-06-25 MSRP was $999'
+  - asin: B0CX23V5ZK
+    apple_sku: MRXN4LL/A
+    category: MacBook Air
+    name: 'MacBook Air 13" M3 8GB 512GB'
+    new_msrp: 1299
+    notes: 'pre-2026-06-25 MSRP was $1,199'
+  - asin: B0CHX1WT1T
+    apple_sku: MRYU3LL/A
+    category: MacBook Air
+    name: 'MacBook Air 13" M3 16GB 512GB'
+    new_msrp: 1499
+    notes: 'pre-2026-06-25 MSRP was $1,399'
+  - asin: B0D2RX5LW9
+    apple_sku: MRYM3LL/A
+    category: MacBook Air
+    name: 'MacBook Air 15" M3 8GB 256GB'
+    new_msrp: 1299
+    notes: '15" base, pre-2026-06-25 MSRP was $1,199'
+  - asin: B0D2RX5C7R
+    apple_sku: MRYP3LL/A
+    category: MacBook Air
+    name: 'MacBook Air 15" M3 8GB 512GB'
+    new_msrp: 1499
+    notes: 'pre-2026-06-25 MSRP was $1,399'
+
+  - asin: B0DL7HZ68P
+    apple_sku: MCX04LL/A
+    category: MacBook Pro
+    name: 'MacBook Pro 14" M4 16GB 512GB'
+    new_msrp: 1799
+    notes: 'pre-2026-06-25 MSRP was $1,599'
+  - asin: B0DL7GS8RT
+    apple_sku: MCX14LL/A
+    category: MacBook Pro
+    name: 'MacBook Pro 14" M4 Pro 24GB 512GB'
+    new_msrp: 2399
+    notes: 'pre-2026-06-25 MSRP was $1,999 (M3 Pro equivalent)'
+  - asin: B0DL7H3RTJ
+    apple_sku: MCX24LL/A
+    category: MacBook Pro
+    name: 'MacBook Pro 14" M4 Max 36GB 1TB'
+    new_msrp: 3499
+    notes: 'pre-2026-06-25 MSRP was $3,099'
+  - asin: B0DL7JD23X
+    apple_sku: MCX44LL/A
+    category: MacBook Pro
+    name: 'MacBook Pro 16" M4 Pro 24GB 512GB'
+    new_msrp: 2799
+    notes: 'pre-2026-06-25 MSRP was $2,499'
+
+  - asin: B0D3J7XK7H
+    apple_sku: MVV93LL/A
+    category: iPad Pro
+    name: 'iPad Pro 11" M4 256GB Wi-Fi'
+    new_msrp: 1099
+    notes: 'pre-2026-06-25 MSRP was $999'
+  - asin: B0D3J7MS6K
+    apple_sku: MVX23LL/A
+    category: iPad Pro
+    name: 'iPad Pro 13" M4 256GB Wi-Fi'
+    new_msrp: 1399
+    notes: 'pre-2026-06-25 MSRP was $1,299'
+  - asin: B0D3J7QK7V
+    apple_sku: MVX73LL/A
+    category: iPad Pro
+    name: 'iPad Pro 13" M4 512GB Wi-Fi'
+    new_msrp: 1599
+    notes: 'pre-2026-06-25 MSRP was $1,499'
+
+  - asin: B0DZDNM962
+    apple_sku: MC9X4LL/A
+    category: iPad Air
+    name: 'iPad Air 13" M3 128GB Wi-Fi'
+    new_msrp: 799
+    notes: 'pre-2026-06-25 MSRP was $699'
+
+  - asin: B0DGHZ9MZD
+    apple_sku: MXP63LL/A
+    category: iPhone
+    name: 'iPhone 16 128GB'
+    new_msrp: 899
+    notes: 'pre-2026-06-25 MSRP was $799 (small bump)'
+
+  - asin: B0DGHYD1YM
+    apple_sku: MTJV3LL/A
+    category: AirPods
+    name: 'AirPods Pro 2 (USB-C)'
+    new_msrp: 249
+    notes: 'pre-2026-06-25 MSRP was $199'

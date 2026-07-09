@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/scrape.py": {
+      "maxDuration": 60,
+      "memory": 1024,
+      "regions": ["iad1"]
+    },
+    "api/deals.py": {
+      "maxDuration": 10,
+      "memory": 256,
+      "regions": ["iad1"]
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/scrape",
+      "schedule": "0 */6 * * *"
+    }
+  ]
+}
