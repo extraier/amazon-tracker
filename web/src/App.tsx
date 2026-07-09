@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Sparkline } from "./Sparkline";
+import { useT, useLang } from "./i18n";
+import { LanguageToggle } from "./i18n/LanguageToggle";
+import { formatRelativeTime, formatPrice } from "./i18n/format";
 
 type Item = {
   asin: string;
@@ -30,22 +33,6 @@ type History = {
   [asin: string]: { ts: string; price: number }[];
 };
 
-const AFFILIATE_DISCLOSURE = (
-  <p>
-    As an Amazon Associate I earn from qualifying purchases. Links to Amazon
-    products on this page are tagged with my affiliate ID; the price you pay
-    is the same.{" "}
-    <a
-      href="https://affiliate-program.amazon.com/help/operating/operating"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      More info
-    </a>
-    .
-  </p>
-);
-
 function priceClass(price: number | null, msrp: number, threshold: number): string {
   if (price === null) return "ok";
   if (price < msrp * threshold) return "deal";
@@ -53,24 +40,9 @@ function priceClass(price: number | null, msrp: number, threshold: number): stri
   return "ok";
 }
 
-function priceFmt(price: number | null, currency = "USD"): string {
-  if (price === null) return "—";
-  if (currency === "USD") return `$${price.toFixed(2)}`;
-  return `${price.toFixed(2)} ${currency}`;
-}
-
-function relativeTime(iso: string): string {
-  if (!iso) return "—";
-  const then = new Date(iso).getTime();
-  const now = Date.now();
-  const diffSec = Math.floor((now - then) / 1000);
-  if (diffSec < 60) return `${diffSec}s ago`;
-  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
-  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
-  return new Date(iso).toLocaleString();
-}
-
 export default function App() {
+  const t = useT();
+  const [lang] = useLang();
   const [live, setLive] = useState<Live | null>(null);
   const [history, setHistory] = useState<History>({});
   const [search, setSearch] = useState("");
@@ -179,50 +151,51 @@ export default function App() {
 
   const sortIndicator = (key: keyof Item) => {
     if (sortKey !== key) return "";
-    return sortDir === "asc" ? " ↑" : " ↓";
+    return sortDir === "asc" ? t("sortAsc") : t("sortDesc");
   };
+
+  const formatPriceLocal = (price: number | null, currency: string = "USD") =>
+    formatPrice(price, currency);
 
   return (
     <div className="app">
       <header>
         <div>
-          <h1>Amazon Apple Tracker</h1>
-          <div className="subtitle">
-            Listings still priced below the post-2026-06-25 Apple US MSRP.
-          </div>
+          <h1>{t("title")}</h1>
+          <div className="subtitle">{t("subtitle")}</div>
         </div>
-        <div className="meta">
-          {live ? (
-            <>
-              Source: <code>{live.source}</code> · last fetch{" "}
-              {relativeTime(live.fetched_at)}
-            </>
-          ) : (
-            "Loading…"
+        <div className="header-right">
+          {live && (
+            <div className="meta">
+              {t("sourceLabel")} <code>{live.source}</code> · {t("lastFetchPrefix")}{" "}
+              {formatRelativeTime(live.fetched_at, lang, t)}
+            </div>
           )}
+          <LanguageToggle />
         </div>
       </header>
 
       {live && (
         <div className="stats">
           <div>
-            <span className="stat-val">{stats.total}</span>tracked
+            <span className="stat-val">{stats.total}</span>
+            {t("statsTracked")}
           </div>
           <div>
             <span className="stat-val" style={{ color: "var(--deal)" }}>
               {stats.deals}
             </span>
-            still at old price
+            {t("statsDeals")}
           </div>
           <div>
             <span className="stat-val" style={{ color: "var(--text-faint)" }}>
               {stats.fetchErr}
             </span>
-            fetch errors
+            {t("statsErrors")}
           </div>
           {stats.biggestSavings && (
             <div>
-              Biggest deal:{" "}
+              {t("statsBiggestDeal")}{" "}
               <span className="stat-val">
                 {stats.biggestSavings.name} −{stats.biggestSavings.savings_pct}%
               </span>
@@ -234,12 +207,12 @@ export default function App() {
       <div className="controls">
         <input
           type="text"
-          placeholder="Search by name, ASIN, or title…"
+          placeholder={t("searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="all">All categories</option>
+          <option value="all">{t("allCategories")}</option>
           {categories.map((c) => (
             <option key={c} value={c}>
               {c}
@@ -262,13 +235,13 @@ export default function App() {
             onChange={(e) => setDealsOnly(e.target.checked)}
             style={{ width: "auto" }}
           />
-          Deals only
+          {t("dealsOnly")}
         </label>
       </div>
 
-      {!live && <div className="empty">Loading data…</div>}
+      {!live && <div className="empty">{t("loading")}</div>}
       {live && filtered.length === 0 && (
-        <div className="empty">No items match your filter.</div>
+        <div className="empty">{t("noMatch")}</div>
       )}
 
       {live && filtered.length > 0 && (
@@ -276,23 +249,23 @@ export default function App() {
           <thead>
             <tr>
               <th onClick={() => setSort("category")} className={sortKey === "category" ? "sorted" : ""}>
-                Category{sortIndicator("category")}
+                {t("colCategory")}{sortIndicator("category")}
               </th>
               <th onClick={() => setSort("name")} className={sortKey === "name" ? "sorted" : ""}>
-                Product{sortIndicator("name")}
+                {t("colProduct")}{sortIndicator("name")}
               </th>
               <th onClick={() => setSort("current_price")} className={sortKey === "current_price" ? "sorted" : ""}>
-                Price{sortIndicator("current_price")}
+                {t("colPrice")}{sortIndicator("current_price")}
               </th>
               <th onClick={() => setSort("new_msrp")} className={sortKey === "new_msrp" ? "sorted" : ""}>
-                New MSRP{sortIndicator("new_msrp")}
+                {t("colNewMsrp")}{sortIndicator("new_msrp")}
               </th>
               <th onClick={() => setSort("savings_pct")} className={sortKey === "savings_pct" ? "sorted" : ""}>
-                Savings{sortIndicator("savings_pct")}
+                {t("colSavings")}{sortIndicator("savings_pct")}
               </th>
-              <th>30-day</th>
+              <th>{t("col30Day")}</th>
               <th onClick={() => setSort("availability")} className={sortKey === "availability" ? "sorted" : ""}>
-                Availability{sortIndicator("availability")}
+                {t("colAvailability")}{sortIndicator("availability")}
               </th>
             </tr>
           </thead>
@@ -313,7 +286,7 @@ export default function App() {
                         className="name"
                       >
                         {i.name}
-                        {i.is_deal && <span className="deals-only-badge">Deal</span>}
+                        {i.is_deal && <span className="deals-only-badge">{t("dealBadge")}</span>}
                       </a>
                       <span className="asin">
                         {i.asin}
@@ -323,19 +296,19 @@ export default function App() {
                   </td>
                   <td>
                     <span className={`price ${cls}`}>
-                      {priceFmt(i.current_price, i.currency)}
+                      {formatPriceLocal(i.current_price, i.currency)}
                     </span>
                   </td>
                   <td>
                     <span className="price" style={{ color: "var(--text-dim)" }}>
-                      {priceFmt(i.new_msrp, "USD")}
+                      {formatPriceLocal(i.new_msrp, "USD")}
                     </span>
                   </td>
                   <td>
                     {i.is_deal ? (
                       <span className="savings">−{i.savings_pct}%</span>
                     ) : (
-                      <span style={{ color: "var(--text-faint)" }}>—</span>
+                      <span style={{ color: "var(--text-faint)" }}>{t("noSavings")}</span>
                     )}
                   </td>
                   <td>
@@ -356,15 +329,21 @@ export default function App() {
       )}
 
       <footer>
-        {AFFILIATE_DISCLOSURE}
+        <p>{t("affiliateDisclosure")}{" "}
+          <a
+            href="https://affiliate-program.amazon.com/help/operating/operating"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t("affiliateMoreInfo")}
+          </a>
+        </p>
         <p style={{ marginTop: 12 }}>
-          Prices scraped from{" "}
+          {t("priceScrapedFrom")}
           <a href="https://www.amazon.com" target="_blank" rel="noopener noreferrer">
             amazon.com
           </a>
-          . Currency, seller, and availability reflect the listing at fetch time.
-          No guarantees — verify on Amazon before purchasing. Last build:{" "}
-          <code>{live?.fetched_at ?? "—"}</code>.
+          {t("priceScrapedFrom2")} {t("priceVerify")}
         </p>
       </footer>
     </div>
