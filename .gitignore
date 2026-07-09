@@ -15,3 +15,4 @@ tracker.db
 
 # Local scratch (used by storage.py when running outside Vercel)
 /tmp/amazon_tracker_deals.json
+.vercel
