@@ -24,9 +24,10 @@ import scraper_lib
 import storage
 
 
-# Path to the seed YAML — sits at the repo root, two levels up from /api/
+# Path to the seed YAML — sits at the repo root, one level up from /api/.
+# api/scrape.py → dirname = /var/task/api, then dirname again = /var/task (project root)
 SEED_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "apple_seed.yaml",
 )
 
