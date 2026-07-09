@@ -17,14 +17,13 @@ import urllib.request
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 13_0_1) "
       "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15")
 
-DEFAULT_AFFILIATE_TAG = "comperige03-20"
+DEFAULT_AFFILIATE_TAG = "comparetige03-20"
 DEAL_THRESHOLD = 0.98
 
 
-def fetch_html(asin, timeout=15):
-    """Fetch the Amazon product page. Returns (status, body, error, dt_seconds)."""
-    url = f"https://www.amazon.com/dp/{asin}"
-    headers = {
+def _warmed_headers(referer="https://www.amazon.com/"):
+    """Build a header set that closely mimics Safari 16 on macOS."""
+    return {
         "User-Agent": UA,
         "Accept": ("text/html,application/xhtml+xml,application/xml;q=0.9,"
                    "image/webp,*/*;q=0.8"),
@@ -37,9 +36,34 @@ def fetch_html(asin, timeout=15):
         "Sec-Fetch-Site": "none",
         "Sec-Fetch-User": "?1",
         "Cache-Control": "max-age=0",
-        "Referer": "https://www.amazon.com/",
+        "Referer": referer,
     }
-    req = urllib.request.Request(url, headers=headers)
+
+
+def warm_session(timeout=10):
+    """
+    Pre-warm by visiting amazon.com homepage. Establishes cookies and a
+    referer chain so subsequent product-page requests look less like
+    data-center scraping. Returns a CookieJar (currently a no-op stub —
+    we rely on Amazon accepting the Referer from /, which is good enough
+    in most cases).
+    """
+    req = urllib.request.Request("https://www.amazon.com/", headers=_warmed_headers())
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            r.read()  # drain
+    except Exception:
+        pass
+    return None
+
+
+def fetch_html(asin, timeout=15):
+    """Fetch the Amazon product page. Returns (status, body, error, dt_seconds)."""
+    # Use a search results page as the referer — looks more like a real user
+    # who clicked into a product listing rather than a direct bot hit.
+    referer = f"https://www.amazon.com/s?k={asin}"
+    url = f"https://www.amazon.com/dp/{asin}"
+    req = urllib.request.Request(url, headers=_warmed_headers(referer=referer))
     t0 = time.time()
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:

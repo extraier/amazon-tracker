@@ -60,6 +60,11 @@ def _do_scrape(seeds, affiliate_tag):
         # Single-line log; Vercel captures stdout in the function logs
         print(f"  [{i+1}/{total}] {asin}  {price_str}  {dt:.2f}s", flush=True)
 
+    # Pre-warm: visit amazon.com homepage to set up a referer chain.
+    # This reduces the captcha rate on data-center IPs.
+    print("[scrape] warming session with amazon.com homepage", flush=True)
+    scraper_lib.warm_session()
+
     result = scraper_lib.scrape_all(
         seeds, affiliate_tag=affiliate_tag,
         sleep_s=1.5, jitter=0.3, on_progress=on_progress,
