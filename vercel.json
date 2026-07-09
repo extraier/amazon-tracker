@@ -1,14 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd web && npm install && npm run build",
+  "outputDirectory": "web/dist",
+  "installCommand": "echo 'install handled in buildCommand'",
   "functions": {
     "api/scrape.py": {
       "maxDuration": 60,
-      "memory": 1024,
       "regions": ["iad1"]
     },
     "api/deals.py": {
       "maxDuration": 10,
-      "memory": 256,
       "regions": ["iad1"]
     }
   },
