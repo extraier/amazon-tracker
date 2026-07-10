@@ -495,44 +495,40 @@ footer a {
   text-decoration: none;
 }
 
-/* Top row: image | meta (amazon + flag) | big price
-   On narrow screens, this stacks vertically via @media below. */
+/* Top section: image | meta on row 1, big price on row 2.
+   The price gets its own row so it never clips off the right edge
+   regardless of card width — at 36px monospace, '$1,299.00' needs
+   ~178px and the meta column (Amazon + flag) needs ~110px, but in a
+   340px card there's only ~107px left after thumb (96) + meta (90) +
+   2 gaps (32). That was clipping the last digit. */
 .alert-top {
   display: grid;
-  grid-template-columns: 96px auto minmax(0, 1fr);
+  grid-template-columns: 96px 1fr;
+  grid-template-areas:
+    "thumb  meta"
+    "price  price";
   align-items: center;
   gap: 16px;
   min-height: 96px;
 }
 
-/* Keep the price from overflowing the card on narrow widths.
-   Without min-width: 0, grid items default to min-content sizing
-   which forces them to be at least as wide as their content. */
-.alert-price-big {
+/* Even though the meta column is the wider one, the price needs
+   full row width to fit 4+ digit prices comfortably. */
+.alert-top .alert-thumb { grid-area: thumb; }
+.alert-top .alert-meta { grid-area: meta; }
+.alert-top .alert-price-big {
+  grid-area: price;
+  justify-self: end;          /* right-align the big price */
+  margin-top: 4px;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;           /* never truncate digits */
 }
 
-/* On screens too narrow for the horizontal layout, stack the price
-   on its own row so it never clips off the right edge. */
+/* Tiny screens — drop sizes further so the meta column doesn't overflow */
 @media (max-width: 480px) {
-  .alert-top {
-    grid-template-columns: 96px 1fr;
-    grid-template-areas:
-      "thumb  meta"
-      "price  price";
-    align-items: start;
-  }
-  .alert-top .alert-thumb { grid-area: thumb; }
-  .alert-top .alert-meta { grid-area: meta; }
-  .alert-top .alert-price-big {
-    grid-area: price;
-    justify-self: end;
-    margin-top: 4px;
-  }
-  /* Drop the meta text size on tiny screens */
   .alert-amazon svg { width: 72px !important; height: 29px !important; }
   .alert-price-amount { font-size: 30px !important; }
+  .alert-top { gap: 12px; }
 }
 
 .alert-thumb {
