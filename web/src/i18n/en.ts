@@ -3,8 +3,8 @@
  */
 const en: Record<string, string> = {
   // Header
-  "title": "Amazon Apple Tracker",
-  "subtitle": "Amazon US listings still priced below the post-2026-06-25 Apple US MSRP.",
+  "title": "Apple Price Drops — Amazon US",
+  "subtitle": "Apple products on Amazon US priced below the regular MSRP. Catching the discounts before they expire.",
   "themeLight": "Light",
   "themeDark": "Dark",
   "themeAuto": "Auto",
@@ -18,47 +18,47 @@ const en: Record<string, string> = {
 
   // Stats
   "statsTracked": "tracked",
-  "statsDeals": "still at old price",
+  "statsDeals": "still discounted",
   "statsErrors": "fetch errors",
-  "statsBiggestDeal": "Biggest deal:",
+  "statsBiggestDeal": "Biggest drop:",
   "statsBiggestDealValue": "{name} −{pct}%",
 
   // Controls
   "searchPlaceholder": "Search by name, ASIN, or title…",
   "allCategories": "All categories",
-  "dealsOnly": "Deals only",
+  "dealsOnly": "Discounted only",
   "viewTable": "Table",
-  "viewAlerts": "Alerts",
+  "viewAlerts": "Deals",
   "viewModeAria": "View mode",
 
   // Table headers
   "colCategory": "Category",
   "colProduct": "Product",
-  "colPrice": "Price",
-  "colNewMsrp": "New MSRP",
-  "colSavings": "Savings",
+  "colPrice": "Current",
+  "colNewMsrp": "Regular",
+  "colSavings": "Drop",
   "col30Day": "30-day",
   "colAvailability": "Availability",
   "sortAsc": " ↑",
   "sortDesc": " ↓",
 
   // Cell values
-  "dealBadge": "Deal",
+  "dealBadge": "Drop",
   "noSavings": "—",
   // Alert card (Keepa-style)
-  "alertNewMsrp": "post-hike MSRP",
-  "alertCurrentPrice": "current price",
-  "alertSavings": "savings",
+  "alertNewMsrp": "regular price",
+  "alertCurrentPrice": "dropped to",
+  "alertSavings": "you save",
   "alertViewOnAmazon": "View on Amazon →",
   // Modal
   "modalClose": "Close",
-  "modalCurrentPrice": "Current price",
+  "modalCurrentPrice": "Dropped price",
   "modalAvailability": "Availability",
   "modalSeller": "Seller",
   "modalLastSeen": "Last seen",
   "modalPriceHistory": "30-day price history",
   "modalLegendPrice": "actual price",
-  "modalLegendThreshold": "post-hike MSRP",
+  "modalLegendThreshold": "regular MSRP",
   "modalCopyAsin": "Copy ASIN",
   "modalCopied": "Copied!",
   "sellerLabel": "by",

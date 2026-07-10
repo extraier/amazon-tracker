@@ -71,31 +71,46 @@ const ArrowUpIcon = () => (
   </svg>
 );
 
-// Amazon "smile" arrow — taken from Amazon's actual brand mark (simplified path)
+// Amazon smile — simplified wordmark with the iconic curved arrow.
+// Uses <text> for the "amazon" lettering (renders as actual text, picks up
+// the parent's font and theme color via currentColor).
+//
+// ViewBox is 100×40 to fit:
+//   - "amazon" text at y=24, fontSize=24 (height ~28, baseline at 24, top ~-2)
+//   - Smile arrow from (8, 30) curving down to y=37 then up to (88, 30)
+//     with an arrowhead at the right
+//   - Padding so the smile and text descenders aren't clipped
 const AmazonLogo = () => (
-  <svg viewBox="0 0 90 32" aria-hidden="true" style={{ width: 90, height: 32 }}>
+  <svg
+    viewBox="0 0 100 40"
+    aria-hidden="true"
+    style={{ width: 90, height: 36, display: "block" }}
+    preserveAspectRatio="xMidYMid meet"
+  >
     <text
-      x="0"
+      x="50"
       y="24"
       fontFamily="-apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif"
       fontWeight="700"
-      fontSize="26"
+      fontSize="24"
       fill="currentColor"
-      letterSpacing="-1"
+      textAnchor="middle"
+      letterSpacing="-0.5"
     >
       amazon
     </text>
-    {/* Curved arrow under "amazon" — the smile */}
+    {/* Curved arrow under "amazon" — the smile. Kept within viewBox so it
+        never gets clipped by overflow:hidden. */}
     <path
-      d="M 8 28 Q 45 38 82 27"
+      d="M 12 30 Q 50 39 86 30"
       stroke="currentColor"
-      strokeWidth="3"
+      strokeWidth="2.5"
       fill="none"
       strokeLinecap="round"
     />
     {/* Arrowhead at right end of smile */}
     <path
-      d="M 76 24 L 84 27 L 78 32 Z"
+      d="M 80 27 L 88 30 L 82 35 Z"
       fill="currentColor"
     />
   </svg>

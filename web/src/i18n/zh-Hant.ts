@@ -8,8 +8,8 @@
  */
 const zhHant: Record<string, string> = {
   // Header
-  "title": "Amazon 蘋果格價",
-  "subtitle": "仲未加價嘅 Amazon 美國 listing,即追蹤緊。",
+  "title": "Apple 劈價追蹤 — 美國 Amazon",
+  "subtitle": "美國 Amazon 上低過正價嘅 Apple 產品,趁劈價仲未完即追蹤緊。",
   "themeLight": "光",
   "themeDark": "暗",
   "themeAuto": "自動",
@@ -23,15 +23,15 @@ const zhHant: Record<string, string> = {
 
   // Stats
   "statsTracked": "件商品",
-  "statsDeals": "仲未加價",
+  "statsDeals": "仲劈緊價",
   "statsErrors": "個錯誤",
-  "statsBiggestDeal": "最抵買:",
+  "statsBiggestDeal": "劈最多:",
   "statsBiggestDealValue": "{name} -{pct}%",
 
   // Controls
   "searchPlaceholder": "搜尋名稱、ASIN 或標題…",
   "allCategories": "全部類別",
-  "dealsOnly": "只顯示特價",
+  "dealsOnly": "只顯示劈價",
   "viewTable": "列表",
   "viewAlerts": "特價牆",
   "viewModeAria": "顯示方式",
@@ -40,7 +40,7 @@ const zhHant: Record<string, string> = {
   "colCategory": "類別",
   "colProduct": "產品",
   "colPrice": "現價",
-  "colNewMsrp": "新 MSRP",
+  "colNewMsrp": "正價",
   "colSavings": "減幅",
   "col30Day": "30 日",
   "colAvailability": "供貨",
@@ -48,22 +48,22 @@ const zhHant: Record<string, string> = {
   "sortDesc": " ↓",
 
   // Cell values
-  "dealBadge": "特價",
+  "dealBadge": "劈價",
   "noSavings": "—",
   // Alert card (Keepa-style)
-  "alertNewMsrp": "新 MSRP",
-  "alertCurrentPrice": "現價",
+  "alertNewMsrp": "正價",
+  "alertCurrentPrice": "劈到",
   "alertSavings": "慳咗",
   "alertViewOnAmazon": "去 Amazon 睇 →",
   // Modal
   "modalClose": "關閉",
-  "modalCurrentPrice": "現價",
+  "modalCurrentPrice": "劈價後",
   "modalAvailability": "供貨",
   "modalSeller": "賣家",
   "modalLastSeen": "最後更新",
   "modalPriceHistory": "30 日價格走勢",
   "modalLegendPrice": "實際價格",
-  "modalLegendThreshold": "新 MSRP",
+  "modalLegendThreshold": "正價",
   "modalCopyAsin": "複製 ASIN",
   "modalCopied": "已複製!",
   "sellerLabel": "賣家",

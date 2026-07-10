@@ -531,7 +531,7 @@ footer a {
     margin-top: 4px;
   }
   /* Drop the meta text size on tiny screens */
-  .alert-amazon svg { width: 72px !important; height: 26px !important; }
+  .alert-amazon svg { width: 72px !important; height: 29px !important; }
   .alert-price-amount { font-size: 30px !important; }
 }
 
@@ -570,12 +570,26 @@ footer a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  /* Larger gap so the flag and Amazon logo don't visually merge */
+  gap: 8px;
   color: var(--text);
+  min-width: 0;
 }
 
 .alert-amazon {
   color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Ensure the SVG isn't squeezed — it has internal padding so it
+     sizes to its intrinsic ratio */
+  min-height: 32px;
+}
+
+.alert-amazon svg {
+  /* display:block removes the inline-baseline whitespace below the SVG
+     that creates a tiny vertical offset between the logo and the flag */
+  display: block;
 }
 
 .alert-flag {
