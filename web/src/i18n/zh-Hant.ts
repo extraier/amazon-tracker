@@ -10,6 +10,9 @@ const zhHant: Record<string, string> = {
   // Header
   "title": "Amazon 蘋果格價",
   "subtitle": "仲未加價嘅 Amazon 美國 listing,即追蹤緊。",
+  "themeLight": "光",
+  "themeDark": "暗",
+  "themeAria": "色調",
   "sourceLabel": "資料來源:",
   "lastFetchPrefix": "上次更新:",
   "lastFetchJustNow": "啱啱",

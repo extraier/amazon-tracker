@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Sparkline } from "./Sparkline";
 import { useT, useLang } from "./i18n";
 import { LanguageToggle } from "./i18n/LanguageToggle";
+import { ThemeToggle } from "./i18n/ThemeToggle";
 import { formatRelativeTime, formatPrice } from "./i18n/format";
 
 type Item = {
@@ -172,6 +173,7 @@ export default function App() {
             </div>
           )}
           <LanguageToggle />
+          <ThemeToggle />
         </div>
       </header>
 

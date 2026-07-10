@@ -5,6 +5,9 @@ const en: Record<string, string> = {
   // Header
   "title": "Amazon Apple Tracker",
   "subtitle": "Amazon US listings still priced below the post-2026-06-25 Apple US MSRP.",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeAria": "Color theme",
   "sourceLabel": "Source:",
   "lastFetchPrefix": "last fetch",
   "lastFetchJustNow": "just now",
