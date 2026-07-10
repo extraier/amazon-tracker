@@ -116,7 +116,14 @@ function categoryEmoji(category: string): string {
   return CATEGORY_EMOJI[category] ?? "🍎";
 }
 
-export function AlertCard({ item }: { item: AlertCardItem }) {
+export function AlertCard({
+  item,
+  onOpen,
+}: {
+  item: AlertCardItem;
+  /** Called when the user clicks the card body — opens the detail modal. */
+  onOpen?: () => void;
+}) {
   const t = useT();
   const [lang] = useLang();
   const seller = item.seller ?? "Apple";
@@ -127,26 +134,36 @@ export function AlertCard({ item }: { item: AlertCardItem }) {
     : 0;
 
   return (
-    <article className="alert-card" aria-label={item.name}>
-      {/* Title row */}
-      <a
-        href={item.url}
-        target="_blank"
-        rel="noopener noreferrer"
+    <article
+      className="alert-card"
+      aria-label={item.name}
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={(e) => {
+        // Cards are interactive — Enter / Space opens the modal
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen?.();
+        }
+      }}
+    >
+      {/* Title row — click opens modal, not Amazon */}
+      <span
         className="alert-title"
         title={item.title || item.name}
+        role="heading"
+        aria-level={3}
       >
         {item.title || item.name}
-      </a>
+      </span>
 
       {/* Image + meta + price row */}
       <div className="alert-top">
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <div
           className="alert-thumb"
-          aria-label="View product on Amazon"
+          aria-label="View product details"
+          role="presentation"
         >
           {item.image_url ? (
             <img
@@ -154,13 +171,8 @@ export function AlertCard({ item }: { item: AlertCardItem }) {
               alt={item.name}
               className="alert-thumb-img"
               loading="lazy"
-              // Referrer policy matters — Amazon's image CDN returns 403
-              // when the referrer is missing. The default `strict-origin`
-              // works on most browsers; we set it explicitly to be safe.
               referrerPolicy="no-referrer-when-downgrade"
               onError={(e) => {
-                // Fall back to the emoji if the image fails to load
-                // (broken ASIN, expired CDN URL, offline, etc.)
                 const target = e.currentTarget;
                 target.style.display = "none";
                 const sibling = target.nextElementSibling;
@@ -173,7 +185,7 @@ export function AlertCard({ item }: { item: AlertCardItem }) {
             aria-hidden="true"
             style={{ display: item.image_url ? "none" : undefined }}
           >{productImage}</span>
-        </a>
+        </div>
 
         <div className="alert-meta">
           <div className="alert-amazon"><AmazonLogo /></div>
@@ -241,11 +253,14 @@ export function AlertCard({ item }: { item: AlertCardItem }) {
         </div>
       </div>
 
+      {/* CTA still links to Amazon with affiliate tag — but stops propagation
+          so clicking it doesn't ALSO open the modal */}
       <a
         href={item.url}
         target="_blank"
         rel="noopener noreferrer"
         className="alert-cta"
+        onClick={(e) => e.stopPropagation()}
       >
         {t("alertViewOnAmazon")}
       </a>

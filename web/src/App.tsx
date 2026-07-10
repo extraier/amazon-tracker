@@ -5,6 +5,7 @@ import { LanguageToggle } from "./i18n/LanguageToggle";
 import { ThemeToggle } from "./i18n/ThemeToggle";
 import { formatRelativeTime, formatPrice } from "./i18n/format";
 import { AlertCard } from "./AlertCard";
+import { ProductModal } from "./ProductModal";
 
 type Item = {
   asin: string;
@@ -16,6 +17,7 @@ type Item = {
   currency: string;
   availability: string | null;
   seller: string | null;
+  image_url: string | null;
   is_deal: boolean;
   savings_pct: number;
   new_msrp: number;
@@ -50,7 +52,10 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [dealsOnly, setDealsOnly] = useState(false);
-  const [viewMode, setViewMode] = useState<"table" | "alerts">("table");
+  const [viewMode, setViewMode] = useState<"table" | "alerts">("alerts");
+  // When the user clicks a card, the corresponding Item is stored here and
+  // the modal renders with full details.
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [sortKey, setSortKey] = useState<keyof Item>("is_deal");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
@@ -274,7 +279,7 @@ export default function App() {
         <div className="empty">{t("noMatch")}</div>
       )}
 
-      {/* Alert cards (Keepa-style) */}
+      {/* Alert cards (Keepa-style) — default view */}
       {live && filtered.length > 0 && viewMode === "alerts" && (
         <div className="alert-grid">
           {filtered.map((i) => (
@@ -284,6 +289,7 @@ export default function App() {
                 ...i,
                 fetched_at: live.fetched_at,
               }}
+              onOpen={() => setSelectedItem(i)}
             />
           ))}
         </div>
@@ -392,6 +398,17 @@ export default function App() {
           {t("priceScrapedFrom2")} {t("priceVerify")}
         </p>
       </footer>
+
+      {/* Product detail modal — opens when a card is clicked */}
+      <ProductModal
+        item={selectedItem}
+        history={
+          selectedItem
+            ? (history[selectedItem.asin] ?? []).map((p) => p.price)
+            : []
+        }
+        onClose={() => setSelectedItem(null)}
+      />
     </div>
   );
 }
