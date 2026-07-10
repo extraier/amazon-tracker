@@ -389,6 +389,8 @@ footer a {
   .stats { gap: 16px; padding: 10px 12px; }
   .alert-card { padding: 18px; border-radius: 12px; }
   .alert-price-amount { font-size: 30px; }
+  .alert-bottom { gap: 8px; }
+  .alert-cell-value { font-size: 18px !important; }
 }
 
 /* =============================================================
@@ -436,7 +438,10 @@ footer a {
    ============================================================= */
 .alert-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  /* On wider screens: cards are 340px+ and we auto-fill as many as fit.
+     On narrow phones (where 340px would overflow): drop to a single column
+     so each card takes the full width of the page (minus its own padding). */
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: 16px;
   margin-top: 8px;
 }
@@ -490,13 +495,44 @@ footer a {
   text-decoration: none;
 }
 
-/* Top row: image | meta (amazon + flag) | big price */
+/* Top row: image | meta (amazon + flag) | big price
+   On narrow screens, this stacks vertically via @media below. */
 .alert-top {
   display: grid;
-  grid-template-columns: 96px 1fr auto;
+  grid-template-columns: 96px auto minmax(0, 1fr);
   align-items: center;
   gap: 16px;
   min-height: 96px;
+}
+
+/* Keep the price from overflowing the card on narrow widths.
+   Without min-width: 0, grid items default to min-content sizing
+   which forces them to be at least as wide as their content. */
+.alert-price-big {
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* On screens too narrow for the horizontal layout, stack the price
+   on its own row so it never clips off the right edge. */
+@media (max-width: 480px) {
+  .alert-top {
+    grid-template-columns: 96px 1fr;
+    grid-template-areas:
+      "thumb  meta"
+      "price  price";
+    align-items: start;
+  }
+  .alert-top .alert-thumb { grid-area: thumb; }
+  .alert-top .alert-meta { grid-area: meta; }
+  .alert-top .alert-price-big {
+    grid-area: price;
+    justify-self: end;
+    margin-top: 4px;
+  }
+  /* Drop the meta text size on tiny screens */
+  .alert-amazon svg { width: 72px !important; height: 26px !important; }
+  .alert-price-amount { font-size: 30px !important; }
 }
 
 .alert-thumb {
@@ -599,6 +635,24 @@ footer a {
   grid-template-columns: 1fr 1fr 1fr;
   align-items: end;
   gap: 12px;
+}
+
+/* On narrow screens, the bottom row's price text can clip.
+   Reduce font size and tighten the gap to keep everything visible. */
+@media (max-width: 600px) {
+  .alert-bottom {
+    gap: 6px;
+  }
+  .alert-cell-value-trigger,
+  .alert-cell-value-seller {
+    font-size: 16px !important;
+  }
+  .alert-cell-value-savings {
+    font-size: 14px !important;
+  }
+  .alert-cell-sub {
+    font-size: 10px !important;
+  }
 }
 
 .alert-cell {
