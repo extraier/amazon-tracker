@@ -503,10 +503,20 @@ footer a {
   justify-content: center;
   text-decoration: none;
   overflow: hidden;
+  position: relative;
 }
 
 [data-theme="dark"] .alert-thumb {
   background: #ffffff; /* keep thumb white in dark mode too — matches Amazon listing style */
+}
+
+.alert-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Amazon product images come with a white background; align the
+     container so any non-square images still look balanced. */
+  display: block;
 }
 
 .alert-thumb-emoji {

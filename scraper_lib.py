@@ -172,6 +172,45 @@ def parse_product_page(html):
     if m:
         out["seller"] = re.sub(r"\s+", " ", m.group(1)).strip()[:200]
 
+    # Main product image. Amazon uses several different layouts depending on
+    # category and locale, so we try multiple strategies:
+    #   1. data-old-hires="..." on the first product image (always the
+    #      full-res URL, present on most product pages)
+    #   2. <img id="landingImage"> (older desktop layout, some Renewed listings)
+    #   3. <img id="imgBlkFront"> (legacy)
+    # Strategy 1 (data-old-hires) is most reliable because it gives us the
+    # original-resolution URL without Amazon's size suffix.
+    image_url = None
+    m = re.search(r'data-old-hires="([^"]+)"', html)
+    if m:
+        image_url = m.group(1)
+    if not image_url:
+        for img_id in ("landingImage", "imgBlkFront", "main-image"):
+            m = re.search(
+                rf'<img[^>]+id="{img_id}"[^>]+src="([^"]+)"',
+                html
+            )
+            if m:
+                image_url = m.group(1)
+                break
+    # Final fallback: any m.media-amazon.com image whose alt text contains
+    # the product title (heuristic — works for some non-standard layouts).
+    if not image_url:
+        m = re.search(
+            r'<img[^>]+alt="[^"]*?(?:MacBook|iPad|iPhone|AirPods|Apple)[^"]*"'
+            r'[^>]+src="(https://m\.media-amazon\.com/images/I/[^"]+)"',
+            html, re.I
+        )
+        if m:
+            image_url = m.group(1)
+    if image_url:
+        # Strip Amazon's size suffix so the image scales to whatever
+        # container the card uses. e.g. ._AC_SL1500_.jpg → .jpg
+        # Pattern matches any `._SEGMENT_.` — covers _AC_SL1500_,
+        # _AC_UL2400_, _SX342_, _SY445_QL70_, _CR0,0,281,446_ etc.
+        image_url = re.sub(r'\._[A-Z][A-Z0-9,_]+\.', '.', image_url)
+        out["image_url"] = image_url
+
     return out
 
 
@@ -191,6 +230,7 @@ def build_item(seed_entry, parsed, affiliate_tag):
         "currency": parsed.get("currency", "USD"),
         "availability": parsed.get("availability"),
         "seller": parsed.get("seller"),
+        "image_url": parsed.get("image_url"),
         "is_deal": False,
         "savings_pct": 0.0,
         "new_msrp": new_msrp,

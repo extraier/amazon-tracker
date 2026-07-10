@@ -130,6 +130,16 @@ export default function App() {
       });
   }, [live, search, category, dealsOnly, sortKey, sortDir]);
 
+  // Auto-switch to alerts view when the user enables "deals only" filter.
+  // UX rationale: if every visible item is a deal, the card layout is more
+  // useful than a table. The user can still override back to table.
+  useEffect(() => {
+    if (dealsOnly && viewMode === "table" && filtered.length > 0
+        && filtered.every((i) => i.is_deal)) {
+      setViewMode("alerts");
+    }
+  }, [dealsOnly, filtered, viewMode]);
+
   const stats = useMemo(() => {
     if (!live)
       return { total: 0, deals: 0, fetchErr: 0, biggestSavings: null as Item | null };

@@ -27,6 +27,7 @@
 
 import { formatPrice, formatRelativeTime } from "./i18n/format";
 import { useT, useLang, type Lang } from "./i18n";
+import { FlagForCurrency, COUNTRY_NAMES } from "./Flags";
 
 export type AlertCardItem = {
   asin: string;
@@ -41,6 +42,7 @@ export type AlertCardItem = {
   availability?: string | null;
   fetched_at: string;
   url: string;
+  image_url?: string | null;
 };
 
 // Inline SVGs — no extra deps
@@ -66,23 +68,6 @@ const ArrowDownIcon = () => (
 const ArrowUpIcon = () => (
   <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
     <path d="M8 14a.5.5 0 0 1-.5-.5V4.707L4.854 7.354a.5.5 0 1 1-.708-.708l3.5-3.5a.5.5 0 0 1 .708 0l3.5 3.5a.5.5 0 0 1-.708.708L8.5 4.707V13.5A.5.5 0 0 1 8 14z" />
-  </svg>
-);
-
-// US flag (simplified — stripes + blue corner). Pure inline SVG, no external image.
-const USFlagIcon = () => (
-  <svg viewBox="0 0 32 24" aria-hidden="true" style={{ width: 36, height: 27, borderRadius: 2 }}>
-    <rect width="32" height="24" fill="#B22234" />
-    {[1, 3, 5, 7, 9, 11].map((i) => (
-      <rect key={i} y={i * 1.7} width="32" height="0.85" fill="#FFFFFF" />
-    ))}
-    <rect width="13" height="11.9" fill="#3C3B6E" />
-    {/* Faint stars (just dots, fully stylised) */}
-    {Array.from({ length: 5 }).map((_, r) =>
-      Array.from({ length: 5 }).map((__, c) => (
-        <circle key={`${r}-${c}`} cx={1.3 + c * 2.4} cy={1.2 + r * 2.2} r="0.5" fill="#fff" />
-      )),
-    )}
   </svg>
 );
 
@@ -163,12 +148,38 @@ export function AlertCard({ item }: { item: AlertCardItem }) {
           className="alert-thumb"
           aria-label="View product on Amazon"
         >
-          <span className="alert-thumb-emoji" aria-hidden="true">{productImage}</span>
+          {item.image_url ? (
+            <img
+              src={item.image_url}
+              alt={item.name}
+              className="alert-thumb-img"
+              loading="lazy"
+              // Referrer policy matters — Amazon's image CDN returns 403
+              // when the referrer is missing. The default `strict-origin`
+              // works on most browsers; we set it explicitly to be safe.
+              referrerPolicy="no-referrer-when-downgrade"
+              onError={(e) => {
+                // Fall back to the emoji if the image fails to load
+                // (broken ASIN, expired CDN URL, offline, etc.)
+                const target = e.currentTarget;
+                target.style.display = "none";
+                const sibling = target.nextElementSibling;
+                if (sibling) (sibling as HTMLElement).style.display = "";
+              }}
+            />
+          ) : null}
+          <span
+            className="alert-thumb-emoji"
+            aria-hidden="true"
+            style={{ display: item.image_url ? "none" : undefined }}
+          >{productImage}</span>
         </a>
 
         <div className="alert-meta">
           <div className="alert-amazon"><AmazonLogo /></div>
-          <div className="alert-flag"><USFlagIcon /></div>
+          <div className="alert-flag">
+            <FlagForCurrency currency={item.currency} width={30} height={22} />
+          </div>
         </div>
 
         <div className="alert-price-big">
