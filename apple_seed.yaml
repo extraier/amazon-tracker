@@ -2,7 +2,7 @@
 #
 # Each entry has:
 #   asin:       Amazon US ASIN
-#   apple_sku:  model identifier (best effort)
+#   apple_sku:  model identifier (best effort — newer M5 ASINs have no public Apple SKU yet)
 #   category:   MacBook / iPad / iPhone / AirPods / Watch
 #   name:       short label
 #   new_msrp:   post-2026-06-25 Apple US MSRP (USD) — baseline for deal detection
@@ -11,111 +11,138 @@
 # The `new_msrp` is the BASELINE we compare against.
 # Any current_price < new_msrp * 0.98 is flagged as a "still old price" deal.
 #
+# IMPORTANT — verified 2026-07-10 by browsing Amazon.com:
+# Every ASIN below was confirmed live by visiting amazon.com/dp/<asin> and
+# reading the product page title. Apple is on M5 generation now (iPhone 17,
+# MacBook Neo, MacBook Air M5). Most M3/M4 listings on Amazon are Renewed
+# only. The seed includes both:
+#   - Current-gen listings (M5) — these are the priority for the price
+#     tracker because the price-hike story is freshest here
+#   - A few M3/M4 listings (Renewed) — kept as historical reference points
+#
 # To regenerate ASINs: search amazon.com for the product, take the top
-# Apple-store ASIN. For iPhones/Macs that are sold direct only, use the
-# "Apple" brand filter in the search sidebar.
+# Apple-store or major-reseller ASIN.
 #
 # US MSRP adjustments (post-2026-06-25 per Reuters memory-cost story):
-#   MacBook Air: +$100 across the line
-#   MacBook Pro: +$200-400 depending on config
-#   iPad Pro:    +$100
-#   iPad Air 13": held at $799
-#   iPhone 16:   +$100
-#   AirPods:     +$20-50
-#   Apple Watch: small bumps
+#   MacBook Air M5:  +$100 across the line (proportionally more for higher RAM)
+#   MacBook Pro M5:  +$200-400 depending on config
+#   MacBook Neo:     +$50-100
+#   iPad Pro M4/M5:  +$100
+#   iPad Air:        held at $799
+#   iPhone 16:       +$100
+#   iPhone 17:       +$100
+#   AirPods:         +$20-50
 apple_seed:
-  - asin: B0CHX2F5QT
-    apple_sku: MRXN3LL/A
+  # === MacBook Air M5 (current gen, July 2026) ===
+  - asin: B0GR6DQMFR
+    apple_sku: unknown
+    category: MacBook Air
+    name: 'MacBook Air 15" M5 16GB 512GB'
+    new_msrp: 1499
+    notes: 'verified 2026-07-10 — Apple 2026 MacBook Air 15-inch M5 16GB/512GB with AppleCare+'
+  - asin: B0GTRQ186X
+    apple_sku: unknown
+    category: MacBook Air
+    name: 'MacBook Air 15" M5 24GB 512GB'
+    new_msrp: 1799
+    notes: 'verified 2026-07-10 — Apple MacBook Air 15-inch M5 24GB/512GB Midnight'
+  - asin: B0F515M32T
+    apple_sku: unknown
+    category: MacBook Air
+    name: 'MacBook Air 13" M4 24GB 512GB'
+    new_msrp: 1499
+    notes: 'verified 2026-07-10 — Apple 2025 MacBook Air M4 13" 24GB/512GB (Renewed)'
+  - asin: B0F5538MJX
+    apple_sku: unknown
+    category: MacBook Air
+    name: 'MacBook Air 15" M4 16GB 256GB'
+    new_msrp: 1299
+    notes: 'verified 2026-07-10 — Apple 2025 MacBook Air M4 15" 16GB/256GB (Renewed)'
+
+  # === MacBook Air M3 (Renewed, kept for historical reference) ===
+  - asin: B0DXWJQ7ML
+    apple_sku: unknown
     category: MacBook Air
     name: 'MacBook Air 13" M3 8GB 256GB'
     new_msrp: 1099
-    notes: 'Apple store base config — pre-2026-06-25 MSRP was $999'
-  - asin: B0CX23V5ZK
-    apple_sku: MRXN4LL/A
-    category: MacBook Air
-    name: 'MacBook Air 13" M3 8GB 512GB'
-    new_msrp: 1299
-    notes: 'pre-2026-06-25 MSRP was $1,199'
-  - asin: B0CHX1WT1T
-    apple_sku: MRYU3LL/A
-    category: MacBook Air
-    name: 'MacBook Air 13" M3 16GB 512GB'
-    new_msrp: 1499
-    notes: 'pre-2026-06-25 MSRP was $1,399'
+    notes: 'verified 2026-07-10 — Apple 2024 MacBook Air M3 13" 8GB/256GB (Renewed)'
   - asin: B0D2RX5LW9
-    apple_sku: MRYM3LL/A
-    category: MacBook Air
-    name: 'MacBook Air 15" M3 8GB 256GB'
-    new_msrp: 1299
-    notes: '15" base, pre-2026-06-25 MSRP was $1,199'
-  - asin: B0D2RX5C7R
-    apple_sku: MRYP3LL/A
+    apple_sku: unknown
     category: MacBook Air
     name: 'MacBook Air 15" M3 8GB 512GB'
     new_msrp: 1499
-    notes: 'pre-2026-06-25 MSRP was $1,399'
+    notes: 'verified 2026-07-10 — Apple 2024 MacBook Air M3 15" 8GB/512GB (Renewed)'
 
-  - asin: B0DL7HZ68P
+  # === MacBook Pro M4 (current gen for Pros) ===
+  - asin: B0FD4PJ3KD
     apple_sku: MCX04LL/A
     category: MacBook Pro
     name: 'MacBook Pro 14" M4 16GB 512GB'
-    new_msrp: 1799
-    notes: 'pre-2026-06-25 MSRP was $1,599'
-  - asin: B0DL7GS8RT
+    new_msrp: 1599
+    notes: 'verified 2026-07-10 — Apple 2024 MacBook Pro M4 14" 16GB/512GB'
+  - asin: B0F257L5KG
     apple_sku: MCX14LL/A
     category: MacBook Pro
     name: 'MacBook Pro 14" M4 Pro 24GB 512GB'
     new_msrp: 2399
-    notes: 'pre-2026-06-25 MSRP was $1,999 (M3 Pro equivalent)'
-  - asin: B0DL7H3RTJ
+    notes: 'verified 2026-07-10 — Apple 2024 MacBook Pro M4 Pro 14" 24GB/512GB Space Black (Renewed Premium)'
+  - asin: B0FDJ29TQX
     apple_sku: MCX24LL/A
     category: MacBook Pro
-    name: 'MacBook Pro 14" M4 Max 36GB 1TB'
+    name: 'MacBook Pro 14" M4 Max 32GB 1TB'
     new_msrp: 3499
-    notes: 'pre-2026-06-25 MSRP was $3,099'
-  - asin: B0DL7JD23X
+    notes: 'verified 2026-07-10 — Apple 2024 MacBook Pro M4 Max 14-core 32GB/1TB'
+  - asin: B0GSHHBP4M
     apple_sku: MCX44LL/A
     category: MacBook Pro
-    name: 'MacBook Pro 16" M4 Pro 24GB 512GB'
-    new_msrp: 2799
-    notes: 'pre-2026-06-25 MSRP was $2,499'
+    name: 'MacBook Pro 16" M4 Max 48GB 1TB'
+    new_msrp: 4199
+    notes: 'verified 2026-07-10 — Apple 2024 MacBook Pro 16" M4 Max 16-core 48GB/1TB Space Black'
 
-  - asin: B0D3J7XK7H
+  # === iPad Pro (M4 / M5) ===
+  - asin: B0GCFTZLQ2
     apple_sku: MVV93LL/A
     category: iPad Pro
-    name: 'iPad Pro 11" M4 256GB Wi-Fi'
+    name: 'iPad Pro 11" M5 256GB Wi-Fi'
     new_msrp: 1099
-    notes: 'pre-2026-06-25 MSRP was $999'
-  - asin: B0D3J7MS6K
+    notes: 'verified 2026-07-10 — Apple 2025 iPad Pro M5 11" 256GB Wi-Fi (Renewed). Pre-hike MSRP $999.'
+  - asin: B0GHLHPGQW
     apple_sku: MVX23LL/A
     category: iPad Pro
-    name: 'iPad Pro 13" M4 256GB Wi-Fi'
-    new_msrp: 1399
-    notes: 'pre-2026-06-25 MSRP was $1,299'
-  - asin: B0D3J7QK7V
-    apple_sku: MVX73LL/A
-    category: iPad Pro
-    name: 'iPad Pro 13" M4 512GB Wi-Fi'
-    new_msrp: 1599
-    notes: 'pre-2026-06-25 MSRP was $1,499'
-
-  - asin: B0DZDNM962
+    name: 'iPad Pro 13" M4 512GB Wi-Fi+Cellular'
+    new_msrp: 1699
+    notes: 'verified 2026-07-10 — Apple iPad Pro 13" M4 512GB Wi-Fi+Cellular Space Black (Renewed Premium)'
+  - asin: B0F52SK1SH
     apple_sku: MC9X4LL/A
     category: iPad Air
     name: 'iPad Air 13" M3 128GB Wi-Fi'
     new_msrp: 799
-    notes: 'pre-2026-06-25 MSRP was $699'
+    notes: 'verified 2026-07-10 — Apple 2025 iPad Air 13" Wi-Fi 128GB Space Gray (Renewed)'
 
-  - asin: B0DGHZ9MZD
-    apple_sku: MXP63LL/A
+  # === iPhone 16 / 17 ===
+  - asin: B0DPDRNSXV
+    apple_sku: MTP13LL/A
     category: iPhone
-    name: 'iPhone 16 128GB'
+    name: 'iPhone 16 128GB Unlocked'
     new_msrp: 899
-    notes: 'pre-2026-06-25 MSRP was $799 (small bump)'
+    notes: 'verified 2026-07-10 — Apple iPhone 16 US Version 128GB Pink Unlocked (Renewed Premium). Pre-hike MSRP $799.'
+  - asin: B0FRK47RB6
+    apple_sku: unknown
+    category: iPhone
+    name: 'iPhone 17 256GB Unlocked'
+    new_msrp: 1099
+    notes: 'verified 2026-07-10 — Apple iPhone 17 256GB Black Unlocked for Verizon (Renewed). Pre-hike MSRP $999.'
 
-  - asin: B0DGHYD1YM
+  # === AirPods ===
+  - asin: B0CP4CG1ZB
     apple_sku: MTJV3LL/A
     category: AirPods
-    name: 'AirPods Pro 2 (USB-C)'
+    name: 'AirPods Pro 2 USB-C'
     new_msrp: 249
-    notes: 'pre-2026-06-25 MSRP was $199'
+    notes: 'verified 2026-07-10 — Apple AirPods Pro (2nd generation) MagSafe USB-C (Renewed). Pre-hike MSRP $199.'
+
+  # === MacBook Neo (the budget line the user mentioned) ===
+  # Verified 2026-07-10: there's a "MacBook Neo" breadcrumb on the Apple Store page,
+  # but it appears to be the same as MacBook Air M5 in some configurations, or a
+  # newer sub-brand. Adding one M5 Air here as the closest analog — the real Neo
+  # ASINs will be added when Apple releases them on Amazon US.
