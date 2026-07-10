@@ -86,6 +86,49 @@ def test_load_seed():
     print(f"  ✓ load_seed: {len(seeds)} ASINs loaded, first = {seeds[0]['name']}")
 
 
+def test_savings_formula_edge_cases():
+    """Verify the build_item formula correctly classifies discounts across
+    edge cases: at-threshold, above-MSRP, zero-priced, etc. The discount
+    tracker should always show non-negative, sane savings values."""
+    seed_template = {
+        "asin": "B0TEST0000",
+        "category": "Test",
+        "name": "Test product",
+    }
+    parsed_no_price = {"current_price": None, "title": "x", "currency": "USD"}
+
+    cases = [
+        # (label, current_price, new_msrp, expected_is_deal, expected_savings_pct)
+        ("Discount user-flagged (iPad Pro)", 999.0, 1099.0, True, 9.09),
+        ("Big discount", 500.0, 1500.0, True, 66.67),
+        ("Exact MSRP (no discount)", 1499.0, 1499.0, False, 0.0),
+        ("Just above 2% threshold", 981.0, 1000.0, False, 0.0),   # 981 >= 1000*0.98=980
+        ("Just below 2% threshold", 979.0, 1000.0, True, 2.1),    # 979 < 980
+        ("Price above MSRP (rare)", 1200.0, 1000.0, False, 0.0),  # NOT a deal — clamped
+        ("Zero MSRP (avoid div-by-zero)", 500.0, 0.0, False, 0.0),
+        ("Zero price (avoid false-positive deal)", 0.0, 1000.0, False, 0.0),
+        ("Vanishingly cheap (clamp at 99%)", 5.0, 1000.0, True, 99.0),
+    ]
+    for label, current, msrp, exp_deal, exp_savings in cases:
+        seed = {**seed_template, "new_msrp": msrp}
+        parsed = {**parsed_no_price, "current_price": current}
+        item = scraper_lib.build_item(seed, parsed, "tag-test")
+        assert item["is_deal"] == exp_deal, (
+            f"{label}: expected is_deal={exp_deal}, got {item['is_deal']} "
+            f"(current={current}, msrp={msrp})"
+        )
+        # Compare with tolerance for float rounding
+        got = item["savings_pct"]
+        assert abs(got - exp_savings) < 0.02, (
+            f"{label}: expected savings_pct≈{exp_savings}, got {got}"
+        )
+        # Critical: savings must be non-negative for the discount tracker
+        assert item["savings_pct"] >= 0, (
+            f"{label}: savings_pct should be ≥ 0, got {got}"
+        )
+    print(f"  ✓ savings formula: {len(cases)} edge cases verified")
+
+
 def test_storage_roundtrip():
     payload = {
         "fetched_at": "2026-07-09T15:00:00Z",
@@ -104,5 +147,6 @@ if __name__ == "__main__":
     test_load_seed()
     test_parser()
     test_build_item()
+    test_savings_formula_edge_cases()
     test_storage_roundtrip()
     print("\n✅ All smoke tests passed.")

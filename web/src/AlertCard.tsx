@@ -144,9 +144,15 @@ export function AlertCard({
   const seller = item.seller ?? "Apple";
   const productImage = categoryEmoji(item.category);
   const lastSeen = formatRelativeTime(item.fetched_at, lang, t);
-  const absSavings = item.current_price !== null
-    ? item.new_msrp - item.current_price
-    : 0;
+  // Discount calculation: difference between the regular price and the
+  // current (alert) price. Always non-negative for a discount tracker —
+  // if the current price somehow exceeds the MSRP (scraper picked up a
+  // third-party listing, wrong ASIN, etc.), clamp to 0 so the UI never
+  // shows a negative dollar amount in the "you save" cell.
+  const absSavings =
+    item.current_price !== null && item.new_msrp > item.current_price
+      ? item.new_msrp - item.current_price
+      : 0;
 
   return (
     <article

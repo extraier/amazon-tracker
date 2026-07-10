@@ -239,11 +239,23 @@ def build_item(seed_entry, parsed, affiliate_tag):
         "error": parsed.get("error"),
     }
     if item["current_price"] is not None and item["currency"] == "USD":
-        if item["current_price"] < new_msrp * DEAL_THRESHOLD:
+        # A "deal" only counts when current_price is meaningfully below MSRP.
+        # Threshold: at least 2% below (DEAL_THRESHOLD = 0.98) so we don't
+        # flag every small price tick as a deal.
+        if (
+            item["current_price"] < new_msrp * DEAL_THRESHOLD
+            and new_msrp > 0
+            and item["current_price"] > 0
+        ):
             item["is_deal"] = True
-            item["savings_pct"] = round(
-                (new_msrp - item["current_price"]) / new_msrp * 100, 2
+            # Savings% = (regular MSRP − current price) / regular MSRP × 100
+            # Always positive for a discount tracker. Clamped to [0, 99]
+            # so a vanishingly cheap listing (third-party seller, error
+            # scrape, etc.) can't produce a >100% "savings" claim.
+            raw_pct = (
+                (new_msrp - item["current_price"]) / new_msrp * 100
             )
+            item["savings_pct"] = max(0.0, min(round(raw_pct, 2), 99.0))
     return item
 
 

@@ -126,9 +126,13 @@ export function ProductModal({
   if (!item) return null;
 
   const seller = item.seller ?? "Apple";
-  const absSavings = item.current_price !== null
-    ? item.new_msrp - item.current_price
-    : 0;
+  // Discount = (regular MSRP) − (current/alert price), clamped to 0.
+  // If current_price somehow exceeds MSRP (bad scrape, wrong ASIN),
+  // the cell shows $0 instead of a misleading negative number.
+  const absSavings =
+    item.current_price !== null && item.new_msrp > item.current_price
+      ? item.new_msrp - item.current_price
+      : 0;
   const isDeal = item.current_price !== null
     && item.current_price < item.new_msrp * 0.98;
 
