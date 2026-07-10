@@ -220,25 +220,31 @@ export function AlertCard({
 
       {/* Bottom row — alert data: trigger / seller / savings */}
       <div className="alert-bottom">
+        {/* Trigger cell — the current price the buyer actually pays (the
+            "deal" price that triggered the alert). Lower than MSRP. */}
         <div className="alert-cell alert-cell-trigger">
           <div className="alert-cell-label">
             <BellIcon />
             <ArrowDownIcon />
           </div>
           <div className="alert-cell-value alert-cell-value-trigger">
-            {formatPrice(item.new_msrp, "USD")}
-          </div>
-          <div className="alert-cell-sub">{t("alertNewMsrp")}</div>
-        </div>
-
-        <div className="alert-cell alert-cell-seller">
-          <div className="alert-cell-label alert-cell-label-plain">{seller}</div>
-          <div className="alert-cell-value alert-cell-value-seller">
             {formatPrice(item.current_price ?? 0, "USD")}
           </div>
           <div className="alert-cell-sub">{t("alertCurrentPrice")}</div>
         </div>
 
+        {/* Seller cell — shows the post-hike MSRP (the higher reference
+            price). Styled dim + struck-through so it reads as "old
+            comparison" against the bright current price next to it. */}
+        <div className="alert-cell alert-cell-seller">
+          <div className="alert-cell-label alert-cell-label-plain">{seller}</div>
+          <div className="alert-cell-value alert-cell-value-seller">
+            {formatPrice(item.new_msrp, "USD")}
+          </div>
+          <div className="alert-cell-sub">{t("alertNewMsrp")}</div>
+        </div>
+
+        {/* Savings cell — the upside summary, stays the same */}
         <div className="alert-cell alert-cell-savings">
           <div className="alert-cell-label">
             <span className="alert-savings-badge">

@@ -693,14 +693,23 @@ footer a {
   line-height: 1.1;
 }
 
+/* Trigger cell now shows the CURRENT (deal) price — the lower one we're
+   celebrating. Use deal red to match the big price at the top of the card. */
 .alert-cell-value-trigger {
-  color: var(--amazon-orange);
+  color: var(--deal);
   font-size: 22px;
 }
 
+/* Seller cell now shows the post-hike MSRP — the higher reference price.
+   Dim it and strike it through so it reads as "old comparison" against
+   the bright deal price next to it. */
 .alert-cell-value-seller {
-  color: var(--text);
-  font-size: 22px;
+  color: var(--text-dim);
+  font-size: 18px;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--text-faint);
+  font-weight: 500;
 }
 
 .alert-cell-value-savings {
