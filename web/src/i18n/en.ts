@@ -7,6 +7,7 @@ const en: Record<string, string> = {
   "subtitle": "Amazon US listings still priced below the post-2026-06-25 Apple US MSRP.",
   "themeLight": "Light",
   "themeDark": "Dark",
+  "themeAuto": "Auto",
   "themeAria": "Color theme",
   "sourceLabel": "Source:",
   "lastFetchPrefix": "last fetch",

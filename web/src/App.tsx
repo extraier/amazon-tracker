@@ -317,7 +317,7 @@ export default function App() {
                     <Sparkline
                       values={histPrices}
                       threshold={i.new_msrp}
-                      stroke={i.is_deal ? "#ef4444" : "#a3a3a3"}
+                      style={{ color: i.is_deal ? "var(--deal)" : "var(--text-faint)" }}
                     />
                   </td>
                   <td style={{ fontSize: 12, color: "var(--text-dim)" }}>

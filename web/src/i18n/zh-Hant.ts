@@ -12,6 +12,7 @@ const zhHant: Record<string, string> = {
   "subtitle": "仲未加價嘅 Amazon 美國 listing,即追蹤緊。",
   "themeLight": "光",
   "themeDark": "暗",
+  "themeAuto": "自動",
   "themeAria": "色調",
   "sourceLabel": "資料來源:",
   "lastFetchPrefix": "上次更新:",

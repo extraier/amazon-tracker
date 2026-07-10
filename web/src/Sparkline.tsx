@@ -1,6 +1,12 @@
 /**
  * Minimal SVG sparkline. No deps. Takes an array of numbers and renders an
  * inline polyline. Renders nothing if data is empty or single point.
+ *
+ * Color handling:
+ *   - If `stroke` is provided, use it as-is (string or CSS var).
+ *   - If omitted, fall back to `currentColor` — the parent's CSS `color`
+ *     controls the line. Theme-aware by default.
+ *   - Same for `thresholdColor`.
  */
 import React from "react";
 
@@ -8,10 +14,11 @@ export function Sparkline({
   values,
   width = 80,
   height = 24,
-  stroke = "#a3a3a3",
+  stroke,
   strokeWidth = 1.5,
   threshold,
-  thresholdColor = "#ef4444",
+  thresholdColor,
+  style,
 }: {
   values: number[];
   width?: number;
@@ -20,9 +27,11 @@ export function Sparkline({
   strokeWidth?: number;
   threshold?: number;
   thresholdColor?: string;
+  /** Caller-provided style. Merged with our default `verticalAlign`. */
+  style?: React.CSSProperties;
 }) {
   if (!values || values.length < 2) {
-    return <span className="spark" style={{ width, height, display: "inline-block" }} />;
+    return <span className="spark" style={{ width, height, display: "inline-block", ...style }} />;
   }
 
   const min = Math.min(...values, threshold ?? Infinity);
@@ -38,13 +47,17 @@ export function Sparkline({
     })
     .join(" ");
 
+  // Default to currentColor so the parent's CSS color drives it
+  const strokeValue = stroke ?? "currentColor";
+  const thresholdValue = thresholdColor ?? "currentColor";
+
   return (
     <svg
       className="spark"
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ verticalAlign: "middle" }}
+      style={{ verticalAlign: "middle", ...style }}
     >
       {threshold !== undefined && (
         <line
@@ -52,7 +65,7 @@ export function Sparkline({
           y1={height - ((threshold - min) / range) * (height - 4) - 2}
           x2={width}
           y2={height - ((threshold - min) / range) * (height - 4) - 2}
-          stroke={thresholdColor}
+          stroke={thresholdValue}
           strokeWidth={1}
           strokeDasharray="2 2"
           opacity={0.5}
@@ -61,7 +74,7 @@ export function Sparkline({
       <polyline
         points={points}
         fill="none"
-        stroke={stroke}
+        stroke={strokeValue}
         strokeWidth={strokeWidth}
         strokeLinejoin="round"
         strokeLinecap="round"

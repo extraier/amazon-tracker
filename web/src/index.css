@@ -154,6 +154,7 @@ header {
   font-weight: 600;
 }
 
+.lang-btn svg,
 .theme-btn svg {
   width: 12px;
   height: 12px;
@@ -219,6 +220,21 @@ header .meta {
   font-size: 13px;
   color: var(--text-dim);
   cursor: pointer;
+}
+
+/* ============ Theme swap animation ============
+   When data-theme changes on <html>, fade text/colors/borders over 200ms.
+   We exclude background (which has its own transition above) so cards and
+   table rows don't double-animate. */
+html.theme-transitioning,
+html.theme-transitioning * {
+  transition:
+    color 200ms ease,
+    border-color 200ms ease,
+    fill 200ms ease,
+    stroke 200ms ease,
+    background-color 200ms ease,
+    box-shadow 200ms ease !important;
 }
 
 /* ============ Table ============ */
