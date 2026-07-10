@@ -4,6 +4,7 @@ import { useT, useLang } from "./i18n";
 import { LanguageToggle } from "./i18n/LanguageToggle";
 import { ThemeToggle } from "./i18n/ThemeToggle";
 import { formatRelativeTime, formatPrice } from "./i18n/format";
+import { AlertCard } from "./AlertCard";
 
 type Item = {
   asin: string;
@@ -49,6 +50,7 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [dealsOnly, setDealsOnly] = useState(false);
+  const [viewMode, setViewMode] = useState<"table" | "alerts">("table");
   const [sortKey, setSortKey] = useState<keyof Item>("is_deal");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
@@ -239,6 +241,22 @@ export default function App() {
           />
           {t("dealsOnly")}
         </label>
+        <div className="view-toggle" role="group" aria-label={t("viewModeAria")}>
+          <button
+            className={`view-btn ${viewMode === "table" ? "active" : ""}`}
+            onClick={() => setViewMode("table")}
+            aria-pressed={viewMode === "table"}
+          >
+            {t("viewTable")}
+          </button>
+          <button
+            className={`view-btn ${viewMode === "alerts" ? "active" : ""}`}
+            onClick={() => setViewMode("alerts")}
+            aria-pressed={viewMode === "alerts"}
+          >
+            {t("viewAlerts")}
+          </button>
+        </div>
       </div>
 
       {!live && <div className="empty">{t("loading")}</div>}
@@ -246,7 +264,23 @@ export default function App() {
         <div className="empty">{t("noMatch")}</div>
       )}
 
-      {live && filtered.length > 0 && (
+      {/* Alert cards (Keepa-style) */}
+      {live && filtered.length > 0 && viewMode === "alerts" && (
+        <div className="alert-grid">
+          {filtered.map((i) => (
+            <AlertCard
+              key={i.asin}
+              item={{
+                ...i,
+                fetched_at: live.fetched_at,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Data table */}
+      {live && filtered.length > 0 && viewMode === "table" && (
         <table>
           <thead>
             <tr>

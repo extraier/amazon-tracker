@@ -32,6 +32,9 @@ const zhHant: Record<string, string> = {
   "searchPlaceholder": "搜尋名稱、ASIN 或標題…",
   "allCategories": "全部類別",
   "dealsOnly": "只顯示特價",
+  "viewTable": "列表",
+  "viewAlerts": "特價牆",
+  "viewModeAria": "顯示方式",
 
   // Table headers
   "colCategory": "類別",
@@ -47,6 +50,11 @@ const zhHant: Record<string, string> = {
   // Cell values
   "dealBadge": "特價",
   "noSavings": "—",
+  // Alert card (Keepa-style)
+  "alertNewMsrp": "新 MSRP",
+  "alertCurrentPrice": "現價",
+  "alertSavings": "慳咗",
+  "alertViewOnAmazon": "去 Amazon 睇 →",
   "sellerLabel": "賣家",
   "asinLabel": "ASIN",
   "amazonStore": "Amazon",

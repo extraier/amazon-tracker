@@ -387,4 +387,305 @@ footer a {
   thead th, tbody td { padding: 6px 8px; }
   .title-cell .name { font-size: 12px; }
   .stats { gap: 16px; padding: 10px 12px; }
+  .alert-card { padding: 18px; border-radius: 12px; }
+  .alert-price-amount { font-size: 30px; }
+}
+
+/* =============================================================
+   View toggle (Table / Alerts)
+   ============================================================= */
+.view-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-left: auto;
+}
+
+.view-btn {
+  background: var(--bg-2);
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: background 0.15s, color 0.15s;
+}
+
+.view-btn:not(.active):hover {
+  background: var(--bg-3);
+  color: var(--text);
+}
+
+.view-btn.active {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .view-btn.active {
+  background: var(--amazon-orange);
+  color: #131a22;
+}
+
+/* =============================================================
+   Alert grid (Keepa-inspired cards)
+   ============================================================= */
+.alert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+/* =============================================================
+   AlertCard — matches the Keepa screenshot layout
+   ============================================================= */
+.alert-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  position: relative;
+}
+
+.alert-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .alert-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Title — bold, large, truncates with ellipsis, hover reveals Amazon link color */
+.alert-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.alert-title:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Top row: image | meta (amazon + flag) | big price */
+.alert-top {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 96px;
+}
+
+.alert-thumb {
+  width: 96px;
+  height: 96px;
+  background: #ffffff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .alert-thumb {
+  background: #ffffff; /* keep thumb white in dark mode too — matches Amazon listing style */
+}
+
+.alert-thumb-emoji {
+  font-size: 56px;
+  line-height: 1;
+}
+
+.alert-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+}
+
+.alert-amazon {
+  color: var(--text);
+}
+
+.alert-flag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-price-big {
+  display: flex;
+  align-items: baseline;
+  color: var(--deal);
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.alert-price-currency {
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 2px;
+}
+
+.alert-price-amount {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Timestamp row with calendar icon */
+.alert-timestamp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+
+.alert-timestamp svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+/* Divider between top and bottom rows */
+.alert-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 -24px;
+}
+
+/* Bottom row — 3-column trigger/seller/savings grid */
+.alert-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: end;
+  gap: 12px;
+}
+
+.alert-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.alert-cell-label {
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--amazon-orange);
+}
+
+.alert-cell-label-plain {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--sans);
+  height: 18px;
+  align-items: center;
+}
+
+.alert-cell-label svg {
+  width: 14px;
+  height: 14px;
+}
+
+.alert-cell-value {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.alert-cell-value-trigger {
+  color: var(--amazon-orange);
+  font-size: 22px;
+}
+
+.alert-cell-value-seller {
+  color: var(--text);
+  font-size: 22px;
+}
+
+.alert-cell-value-savings {
+  color: var(--deal);
+  font-size: 18px;
+}
+
+.alert-savings-sep {
+  color: var(--text-faint);
+  font-weight: 400;
+  margin: 0 2px;
+}
+
+.alert-savings-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--deal);
+  color: var(--deal);
+}
+
+.alert-savings-badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+.alert-cell-sub {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+/* Bottom CTA — "View on Amazon →" */
+.alert-cta {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 10px 0 0;
+  border-top: 1px dashed var(--border);
+  margin: 0 -24px -24px;
+  padding: 14px;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+
+.alert-cta:hover {
+  color: var(--accent);
+  background: var(--bg-3);
+  text-decoration: none;
 }

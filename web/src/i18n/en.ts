@@ -27,6 +27,9 @@ const en: Record<string, string> = {
   "searchPlaceholder": "Search by name, ASIN, or title…",
   "allCategories": "All categories",
   "dealsOnly": "Deals only",
+  "viewTable": "Table",
+  "viewAlerts": "Alerts",
+  "viewModeAria": "View mode",
 
   // Table headers
   "colCategory": "Category",
@@ -42,6 +45,11 @@ const en: Record<string, string> = {
   // Cell values
   "dealBadge": "Deal",
   "noSavings": "—",
+  // Alert card (Keepa-style)
+  "alertNewMsrp": "post-hike MSRP",
+  "alertCurrentPrice": "current price",
+  "alertSavings": "savings",
+  "alertViewOnAmazon": "View on Amazon →",
   "sellerLabel": "by",
   "asinLabel": "ASIN",
   "amazonStore": "Amazon",
